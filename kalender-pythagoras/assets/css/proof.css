@@ -1,0 +1,1028 @@
+.proof-header {
+    background: white;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.back-btn {
+    text-decoration: none;
+    color: #667eea;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 8px;
+    background: #f0f0f0;
+    transition: all 0.3s;
+}
+
+.back-btn:hover {
+    background: #667eea;
+    color: white;
+}
+
+.proof-info h1 {
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.proof-meta {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.meta-item {
+    font-size: 14px;
+    color: #666;
+}
+
+.export-pdf-btn {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.export-pdf-btn:hover {
+    background: #45a049;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.proof-nav {
+    background: white;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 20px auto;
+    border-radius: 10px;
+}
+
+.prev-btn, .next-btn, .home-btn {
+    text-decoration: none;
+    color: #667eea;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 8px;
+    background: #f0f0f0;
+    transition: all 0.3s;
+}
+
+.prev-btn:hover, .next-btn:hover, .home-btn:hover {
+    background: #667eea;
+    color: white;
+}
+
+.next-btn.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.next-btn.disabled:hover {
+    background: #f0f0f0;
+    color: #667eea;
+}
+
+.nav-indicator {
+    font-weight: 600;
+    color: #999;
+}
+
+.proof-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.section {
+    background: white;
+    padding: 30px;
+    margin-bottom: 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.section h2 {
+    color: #667eea;
+    font-size: 28px;
+    margin-bottom: 20px;
+    border-bottom: 3px solid #667eea;
+    padding-bottom: 10px;
+}
+
+.intro-text {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.historical-note {
+    background: #fff3cd;
+    border-left: 4px solid #ffc107;
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 15px;
+}
+
+.animation-wrapper {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.animation-controls {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 15px;
+    flex-wrap: wrap;
+}
+
+.btn-start, .btn-pause, .btn-skip, .btn-reset {
+    padding: 11px 22px;
+    font-size: 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #fff;
+    box-shadow: 0 4px 6px rgba(0,0,0,.12);
+    transition: all 0.25s;
+}
+
+.btn-start { background:#4CAF50; }
+.btn-pause { background:#ff9800; }
+.btn-skip  { background:#1565c0; }
+.btn-reset { background:#f44336; }
+
+.btn-start:hover, .btn-pause:hover, .btn-skip:hover, .btn-reset:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,.18);
+}
+
+.speed-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: white;
+    padding: 10px 18px;
+    border-radius: 8px;
+    flex-wrap: wrap;
+}
+
+.speed-control label {
+    font-weight: bold;
+    color: #333;
+    font-size: 14px;
+}
+
+input[type=range] {
+    width: 150px;
+    cursor: pointer;
+}
+
+.speed-value {
+    font-weight: bold;
+    color: #667eea;
+    min-width: 42px;
+    font-size: 14px;
+}
+
+.progress-box {
+    margin-top: 15px;
+}
+
+.pbar {
+    width: 100%;
+    height: 10px;
+    background: #e0e0e0;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.pfill {
+    height: 100%;
+    width: 0%;
+    border-radius: 6px;
+    background: linear-gradient(90deg,#43a047,#1565c0);
+    transition: width 0.2s;
+}
+
+.ptext {
+    font-size: 14px;
+    font-weight: bold;
+    color: #555;
+    text-align: center;
+    margin-top: 8px;
+}
+
+.proof-steps {
+    list-style: none;
+    counter-reset: step-counter;
+}
+
+.step {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 25px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    border-left: 4px solid #667eea;
+}
+
+.step-number {
+    flex-shrink: 0;
+    width: 50px;
+    height: 50px;
+    background: #667eea;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.step-content h3 {
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.step-content p, .step-content ul {
+    color: #555;
+    line-height: 1.8;
+}
+
+.step-content ul {
+    margin-left: 20px;
+    margin-top: 10px;
+}
+
+.formula {
+    background: #fff3cd;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 15px 0;
+    font-size: 18px;
+    text-align: center;
+    border-left: 4px solid #ffc107;
+}
+
+.formula.final {
+    background: #d4edda;
+    border-left-color: #28a745;
+    font-size: 24px;
+}
+
+.embed-container {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.embed-container h3 {
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.embed-container iframe {
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.external-link {
+    display: inline-block;
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 8px 16px;
+    background: white;
+    border-radius: 6px;
+    transition: all 0.3s;
+}
+
+.external-link:hover {
+    background: #667eea;
+    color: white;
+}
+
+.conclusion-box {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.conclusion-text {
+    font-size: 18px;
+    margin-bottom: 20px;
+    line-height: 1.8;
+}
+
+.main-formula {
+    font-size: 36px;
+    margin: 25px 0;
+    padding: 20px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 10px;
+}
+
+.closing {
+    font-size: 16px;
+    line-height: 1.8;
+    margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+    .proof-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .proof-info h1 {
+        font-size: 22px;
+    }
+    
+    .section {
+        padding: 20px;
+    }
+    
+    .section h2 {
+        font-size: 22px;
+    }
+    
+    .step {
+        flex-direction: column;
+    }
+    
+    .step-number {
+        align-self: flex-start;
+    }
+    
+    .main-formula {
+        font-size: 24px;
+    }
+}
+
+/* ============ (tambahkan di akhir proof.css) ============ */
+
+/* Tombol export ganda di header */
+.export-buttons { display:flex; gap:10px; flex-wrap:wrap; }
+.btn-print {
+    background:#1565c0; color:#fff; border:none; padding:12px 24px;
+    border-radius:8px; font-weight:600; cursor:pointer; transition:all .3s;
+}
+.btn-print:hover { background:#0d47a1; transform:translateY(-2px); }
+
+/* Area export (pratinjau hasil PDF) */
+.export-area {
+    background:#fff; border:2px solid #cfd4dd; border-radius:12px;
+    padding:25px; max-width:800px; margin:0 auto;
+}
+.export-header { text-align:center; border-bottom:3px double #667eea;
+                 padding-bottom:12px; margin-bottom:20px; }
+.export-header h2 { color:#333; font-size:24px; margin-bottom:6px; }
+.export-header p  { color:#666; font-size:14px; }
+
+/* Dua gambar dokumentasi: AWAL & AKHIR */
+.proof-figures {
+    display:flex; gap:20px; justify-content:center;
+    flex-wrap:wrap; margin-bottom:20px;
+}
+.proof-figure {
+    position:relative; background:#fff; border:2px solid #e0e0e0;
+    border-radius:10px; padding:12px; margin:0;
+    break-inside:avoid; page-break-inside:avoid;
+}
+.proof-figure figcaption {
+    margin-top:10px; font-size:13px; color:#555; text-align:center;
+    min-width:240px;
+}
+.state-badge {
+    position:absolute; top:-12px; left:12px; z-index:5;
+    padding:3px 14px; border-radius:12px; color:#fff;
+    font-size:12px; font-weight:bold; letter-spacing:1px;
+}
+.state-badge.initial { background:#ff9800; }
+.state-badge.final   { background:#4CAF50; }
+
+.export-explain { font-size:15px; color:#444; line-height:1.7; margin-bottom:18px; }
+.export-formula {
+    background:#fff3cd; border-left:4px solid #ffc107; border-radius:6px;
+    padding:12px; text-align:center; font-size:20px; font-weight:bold;
+    margin-top:10px;
+}
+.export-conclusion {
+    display:flex; justify-content:space-between; align-items:center;
+    gap:20px; flex-wrap:wrap;
+    background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+    color:#fff; border-radius:10px; padding:18px;
+}
+.export-conclusion-text { font-size:22px; font-weight:bold; flex:1 1 260px; }
+.qr-box {
+    background:#fff; padding:8px; border-radius:8px;
+    width:112px; height:112px; display:flex;
+    align-items:center; justify-content:center;
+    font-size:10px; color:#666; text-align:center;
+}
+.qr-caption { font-size:11px; margin-top:6px; text-align:center; color:#eee; }
+
+/* ============ ATURAN CETAK (Print / Save as PDF vektor) ============ */
+* { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+@page { size: A4 portrait; margin: 12mm; }
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+  
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  
+  body {
+    background: #fff !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  .no-print { display: none !important; }
+  
+  .a4-sheet {
+    transform: none !important;
+    width: 210mm !important;
+    height: 297mm !important;
+    box-shadow: none !important;
+    page-break-inside: avoid !important;
+  }
+  
+  .a4-viewport {
+    overflow: visible !important;
+    background: transparent !important;
+  }
+  
+  .preview-collapse {
+    max-height: none !important;
+    overflow: visible !important;
+  }
+}
+
+
+/* ============ BLOK KALENDER BULANAN (template export) ============ */
+.cal-block { border:2px solid #667eea; border-radius:10px; padding:15px;
+             margin-bottom:18px; background:#fff; }
+.cal-title { display:flex; justify-content:space-between; align-items:baseline;
+             margin-bottom:10px; }
+.cal-month, .cal-year { font-size:26px; font-weight:800; }
+.cal-month { color:#333; } .cal-year { color:#667eea; }
+.cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; }
+.cal-dow { font-weight:700; text-align:center; color:#333; padding:4px 0; }
+.cal-dow.sun { color:#e53935; }
+.cal-cell { text-align:center; padding:6px 0; border:1px solid #e0e0e0;
+            border-radius:4px; font-weight:600; color:#333; background:#fafafa; }
+.cal-cell.sun { color:#e53935; background:#fdecea; }
+.cal-cell.empty { border:none; background:transparent; }
+.cal-meta { margin-top:12px; border:2px dashed #b0bec5; border-radius:8px;
+            padding:10px 12px; background:#fcfcfc; }
+.cal-meta-title { font-weight:700; font-size:13px; color:#546e7a; margin-bottom:6px; }
+.cal-meta-line { font-size:13px; color:#78909c; margin:4px 0; }
+.cal-divider { border:none; border-top:3px double #667eea; margin:18px 0; }
+
+
+/* ============ PRATINJAU COLLAPSED + COMPACT 40/60 ============ */
+.preview-toggle {
+    display:block; margin:0 auto 12px; background:#667eea; color:#fff;
+    border:none; padding:10px 22px; border-radius:20px; font-weight:700;
+    cursor:pointer; transition:all .3s;
+}
+.preview-toggle:hover { background:#5a6fd6; transform:translateY(-2px); }
+.preview-collapse { transition:max-height .45s ease; overflow:hidden; max-height:4000px; }
+.preview-collapse.collapsed { max-height:0; }
+
+/* Kalender compact di area export (≤ ±40% halaman) */
+#exportArea .cal-block { padding:10px; margin-bottom:12px; }
+#exportArea .cal-month, #exportArea .cal-year { font-size:20px; }
+#exportArea .cal-cell { padding:3px 0; font-size:12px; }
+#exportArea .cal-dow { padding:2px 0; font-size:12px; }
+#exportArea .cal-meta { padding:6px 10px; }
+#exportArea .cal-meta-line { font-size:11px; margin:2px 0; }
+#exportArea .proof-figure figcaption { font-size:11px; }
+#exportArea .export-explain { font-size:13px; }
+#exportArea .export-formula { font-size:16px; padding:8px; }
+#exportArea .export-conclusion-text { font-size:18px; }
+
+@media print {
+    .preview-collapse { max-height:none !important; overflow:visible !important; }
+    .preview-toggle { display:none !important; }
+}
+
+/* =====================================================
+   SHEET A4 FIXED 794 × 1123 px  (rasio 1:1.414)
+   [REVISI MARGIN] print: atas 3mm / kiri-kanan 4mm / bawah 4mm
+   layar: padding kecil + distribusi flex → tidak ada rongga
+   ===================================================== */
+.a4-viewport {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    background: #e9ecef;
+    border-radius: 6px;
+    transition: height .2s;
+}
+.a4-sheet {
+    width: 794px;
+    height: 1123px;               /* tinggi tetap agar distribusi flex konsisten */
+    min-height: 1123px;
+    padding: 10px 12px 12px 12px; /* [UBAH] padding layar minimal */
+    background: #ffffff;
+    box-shadow: 0 4px 18px rgba(0,0,0,.18);
+    transform-origin: top left;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+/* --- header sheet (atas rapat) --- */
+.a4-sheet .export-header {
+    text-align: center;
+    border-bottom: 3px double #667eea;
+    padding-bottom: 6px;
+    margin: 0 0 6px 0;
+}
+.a4-sheet .export-header h2 { color: #333; font-size: 21px; margin: 0 0 2px 0; line-height: 1.15; }
+.a4-sheet .export-header p  { color: #666; font-size: 11px; margin: 0; }
+
+/* --- Blok 1: kalender (TIDAK dipotong) --- */
+.a4-sheet .cal-block {
+    border: 1.5px solid #667eea;
+    border-radius: 6px;
+    padding: 8px;
+    margin-bottom: 6px;
+    background: #fff;
+    /* max-height & overflow:hidden DIHAPUS → 6 baris (Jan/Juli) tampil penuh */
+}
+.a4-sheet .cal-title { display: flex; justify-content: space-between; margin-bottom: 4px; }
+.a4-sheet .cal-month, .a4-sheet .cal-year { font-size: 18px; font-weight: 800; }
+.a4-sheet .cal-month { color: #333; }
+.a4-sheet .cal-year  { color: #667eea; }
+.a4-sheet .cal-grid  { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+.a4-sheet .cal-dow   { font-weight: 700; text-align: center; color: #333; padding: 3px 0; font-size: 11px; }
+.a4-sheet .cal-dow.sun { color: #e53935; }
+.a4-sheet .cal-cell  { text-align: center; padding: 5px 0; border: 1px solid #e0e0e0;
+                       border-radius: 3px; font-weight: 600; font-size: 12px; background: #fafafa; }
+.a4-sheet .cal-cell.sun  { color: #e53935; background: #fdecea; }
+.a4-sheet .cal-cell.empty{ border: none; background: transparent; }
+.a4-sheet .cal-meta  { margin-top: 6px; border: 1.5px dashed #b0bec5; border-radius: 5px;
+                       padding: 6px 10px; background: #fcfcfc; }
+.a4-sheet .cal-meta-title { font-weight: 700; font-size: 11px; color: #546e7a; margin-bottom: 3px; }
+.a4-sheet .cal-meta-line  { font-size: 11px; color: #78909c; margin: 2px 0; }
+.a4-sheet .cal-divider    { border: none; border-top: 2px double #667eea; margin: 8px 0; }
+
+/* --- Blok 2: pembuktian (menyerap sisa ruang) --- */
+.a4-sheet .proof-figures {
+    display: flex; gap: 12px; justify-content: center;
+    margin-bottom: 6px;
+    flex: 1 1 auto;      /* [UBAH] mengisi rongga vertikal */
+    min-height: 0;
+}
+.a4-sheet .proof-figure {
+    position: relative; flex: 1 1 45%;
+    background: #fff; border: 1.5px solid #e0e0e0; border-radius: 8px;
+    padding: 8px; margin: 0; break-inside: avoid;
+    display: flex; flex-direction: column;   /* [UBAH] */
+}
+.a4-sheet .proof-figure .scene {
+    flex: 1 1 auto; min-height: 150px;       /* [TAMBAH] gambar membesar mengisi ruang */
+    display: flex; align-items: center; justify-content: center;
+}
+.a4-sheet .proof-figure figcaption { margin-top: 6px; font-size: 11px; color: #555; text-align: center; }
+.a4-sheet .state-badge {
+    position: absolute; top: -1px; left: 10px;
+    padding: 2px 10px; border-radius: 10px; color: #fff;
+    font-size: 10px; font-weight: bold; letter-spacing: 1px;
+}
+.a4-sheet .state-badge.initial { background: #ff9800; }
+.a4-sheet .state-badge.final   { background: #4CAF50; }
+.a4-sheet .scene svg { max-width: 100%; height: auto; }
+.a4-sheet .scene img { max-width: 100%; height: auto; }
+
+.a4-sheet .export-explain { font-size: 12px; color: #444; line-height: 1.5; margin-bottom: 6px; }
+.a4-sheet .export-formula {
+    background: #fff3cd; border-left: 3px solid #ffc107; border-radius: 4px;
+    padding: 6px 10px; text-align: center; font-size: 16px; font-weight: bold; margin-top: 6px;
+}
+.a4-sheet .export-conclusion {
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 14px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff; border-radius: 8px; padding: 10px 12px;
+    margin-top: auto;    /* [UBAH] pin ke bawah → rongga bawah hilang */
+}
+.a4-sheet .export-conclusion-text { font-size: 17px; font-weight: bold; flex: 1; }
+.a4-sheet .qr-box {
+    background: #fff; padding: 4px; border-radius: 5px;
+    width: 92px; height: 92px; display: flex; align-items: center; justify-content: center;
+    font-size: 9px; color: #666; text-align: center;
+}
+.a4-sheet .qr-caption { font-size: 10px; margin-top: 4px; text-align: center; color: #eee; }
+
+/* --- Tombol toggle (hanya di layar) --- */
+.preview-toggle {
+    display: block; margin: 0 auto 10px; background: #667eea; color: #fff;
+    border: none; padding: 9px 20px; border-radius: 18px; font-weight: 700;
+    cursor: pointer; transition: all .3s;
+}
+.preview-toggle:hover { background: #5a6fd6; transform: translateY(-2px); }
+.preview-collapse { transition: max-height .45s ease; overflow: hidden; max-height: 5000px; }
+.preview-collapse.collapsed { max-height: 0; }
+
+/* --- Print: margin minimal + kunci A4 --- */
+@media print {
+    @page { size: A4 portrait; margin: 0; }
+    body { background: #fff !important; }
+    .no-print, .preview-toggle,
+    .section:not(.export-section) { display: none !important; }
+    .section.export-section {
+        display: block !important; box-shadow: none !important;
+        padding: 0 !important; margin: 0 !important; background: transparent !important;
+    }
+    .preview-collapse { max-height: none !important; overflow: visible !important; }
+    .a4-viewport { background: transparent !important; box-shadow: none !important;
+                   overflow: visible !important; height: auto !important; }
+    .a4-sheet {
+        box-shadow: none !important;
+        width: 210mm !important;
+        height: 297mm !important;
+        min-height: 297mm !important;
+        padding: 3mm 4mm 4mm 4mm !important;  /* [UBAH] semula 18mm */
+    }
+}
+
+
+/* ============ COMPACT GROUP INFO + QR (3 kolom) ============ */
+.group-info-compact {
+  display: grid;
+  grid-template-columns: 1fr 1fr 120px;
+  gap: 12px;
+  align-items: start;
+  background: #f7fafc;
+  border: 1px dashed #cbd5e0;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 10px 0;
+  page-break-inside: avoid;
+}
+
+.group-names-col {
+  grid-column: 1 / 3;
+}
+
+.group-names-col strong {
+  display: block;
+  font-size: 13px;
+  color: #2d3748;
+  margin-bottom: 6px;
+}
+
+.name-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 16px;
+}
+
+.name-line {
+  font-size: 12px;
+  color: #4a5568;
+  border-bottom: 1px dotted #999;
+  padding-bottom: 3px;
+  min-height: 18px;
+}
+
+.name-line:nth-child(5) {
+  grid-column: 1; /* No. 5 di kolom kiri */
+}
+
+.qr-col {
+  grid-column: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.qr-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  height: 100px;
+  background: #fff;
+  border-radius: 8px;
+  padding: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.qr-box canvas,
+.qr-box img {
+  width: 84px !important;
+  height: 84px !important;
+  display: block;
+}
+
+.qr-caption {
+  font-size: 10px;
+  color: #718096;
+  text-align: center;
+  margin-top: 4px;
+}
+
+/* ============ MODAL KONFIRMASI DOWNLOAD ============ */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 2000;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.modal-overlay.show {
+  display: flex;
+}
+
+.modal-content {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 480px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  animation: modalIn 0.3s ease;
+}
+
+@keyframes modalIn {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.modal-content h3 {
+  color: #5a67d8;
+  margin: 0 0 12px 0;
+  font-size: 20px;
+}
+
+.modal-content p {
+  color: #4a5568;
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0 0 16px 0;
+}
+
+.ack-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px;
+  background: #f0f4ff;
+  border-radius: 8px;
+  border: 2px solid #e0e7ff;
+  margin-bottom: 16px;
+  cursor: pointer;
+}
+
+.ack-checkbox input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.ack-checkbox span {
+  font-size: 14px;
+  color: #2d3748;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.modal-warning {
+  background: #fff5f5;
+  border: 1px solid #feb2b2;
+  color: #c53030;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  margin-bottom: 16px;
+  display: none;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.modal-actions button {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+#btnModalDownload {
+  background: #48bb78;
+  color: #fff;
+}
+
+#btnModalDownload:disabled {
+  background: #cbd5e0;
+  color: #718096;
+  cursor: not-allowed;
+}
+
+#btnModalDownload:not(:disabled):hover {
+  background: #38a169;
+  transform: translateY(-1px);
+}
+
+#btnModalCancel {
+  background: #f56565;
+  color: #fff;
+}
+
+#btnModalCancel:hover {
+  background: #e53e3e;
+}
+
+/* ====== 4 TOMBOL DI ATAS APPLET ====== */
+.ggb-controls-top { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-bottom:14px; }
+.ggb-controls-top button {
+  flex:1 1 140px; max-width:180px; padding:11px 16px; font-size:15px; font-weight:700;
+  border:none; border-radius:8px; color:#fff; cursor:pointer; min-height:46px;
+  display:flex; align-items:center; justify-content:center; gap:6px;
+  transition:all .2s; box-shadow:0 3px 6px rgba(0,0,0,.15);
+}
+.ggb-controls-top button:hover:not(:disabled){ transform:translateY(-2px); }
+.ggb-controls-top button:disabled{ opacity:.5; cursor:not-allowed; }
+.ggb-controls-top .btn-play  { background:#27ae60; }
+.ggb-controls-top .btn-pause { background:#f39c12; }
+.ggb-controls-top .btn-end   { background:#9b59b6; }
+.ggb-controls-top .btn-reset { background:#e74c3c; }
+
+/* ====== PANDUAN PRESENTASI COLLAPSE ====== */
+.ai-prompt-box { background:#f0f4ff; border:2px solid #5a67d8; border-radius:10px; margin:20px 0; overflow:hidden; }
+.ai-prompt-toggle {
+  width:100%; padding:14px 16px; background:#5a67d8; color:#fff; border:none;
+  font-size:15px; font-weight:700; cursor:pointer; display:flex; align-items:center;
+  justify-content:space-between; gap:10px;
+}
+.ai-prompt-toggle:hover { background:#4c51bf; }
+.ai-prompt-toggle .chevron { transition:transform .3s; font-size:18px; }
+.ai-prompt-box.collapsed .ai-prompt-content { display:none; }
+.ai-prompt-box.collapsed .chevron { transform:rotate(-90deg); }
+.ai-prompt-content { padding:16px; }
+
+/* ====== FORMULA DENGAN BADGE "TERBUKTI" ====== */
+.export-formula {
+  display:flex; align-items:center; justify-content:center; gap:14px; flex-wrap:wrap;
+  background:#fff3cd; border-left:3px solid #ffc107; border-radius:4px;
+  padding:10px 14px; margin-top:8px; text-align:center;
+}
+.formula-calc { font-size:16px; font-weight:bold; color:#333; letter-spacing:0.3px; }
+.formula-verified {
+  background:#4CAF50; color:#fff; padding:4px 10px; border-radius:4px;
+  font-size:13px; font-weight:bold; white-space:nowrap; letter-spacing:0.5px;
+}
+
+/* ====== KESIMPULAN COMPACT (1 BARIS) ====== */
+.pythagoras-container {
+  background:linear-gradient(90deg,#3b5ce1,#8430cf);
+  padding:12px 18px; border-radius:8px; color:#fff;
+  display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+  margin:8px 0 10px 0;
+}
+.pythagoras-label {
+  font-size:14px; font-weight:600; opacity:.95; letter-spacing:0.5px;
+  flex-shrink:0;
+}
+.pythagoras-rumus {
+  font-size:18px; font-weight:900; letter-spacing:0.5px;
+  flex-shrink:0;
+}
+.pythagoras-sep { opacity:.6; font-size:18px; flex-shrink:0; }
+.pythagoras-teks {
+  font-size:13px; font-style:italic; opacity:.95; line-height:1.4;
+  flex:1 1 auto; min-width:200px;
+}
+.pythagoras-refresh-btn {
+  background:rgba(255,255,255,.15); border:none; cursor:pointer; padding:6px;
+  border-radius:50%; transition:all .3s; flex-shrink:0;
+  width:32px; height:32px; display:flex; align-items:center; justify-content:center;
+}
+.pythagoras-refresh-btn:hover { background:rgba(255,255,255,.3); transform:rotate(180deg); }
+.pythagoras-refresh-btn svg { width:18px; height:18px; fill:#fff; }
+
+/* Compact di sheet A4 */
+.a4-sheet .pythagoras-container { padding:10px 14px; gap:10px; }
+.a4-sheet .pythagoras-label { font-size:12px; }
+.a4-sheet .pythagoras-rumus { font-size:15px; }
+.a4-sheet .pythagoras-teks { font-size:11px; min-width:180px; }
+.a4-sheet .pythagoras-sep { font-size:15px; }
+.a4-sheet .pythagoras-refresh-btn { width:26px; height:26px; }
+.a4-sheet .pythagoras-refresh-btn svg { width:14px; height:14px; }
+
+
+/* Print-friendly */
+@media print {
+  .pythagoras-container, .formula-verified, .export-formula {
+    -webkit-print-color-adjust:exact !important;
+    print-color-adjust:exact !important;
+  }
+}
+
+/* ============ PRINT: Compact group info tetap terlihat ============ */
+@media print {
+  .group-info-compact {
+    background: #f7fafc !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .name-line {
+    border-bottom-color: #999 !important;
+  }
+}
+
+/* Gambar screenshot mengisi penuh kotak scene (tidak kecil di tengah) */
+.a4-sheet .proof-figure .scene img{
+  width:100% !important;
+  height:100% !important;
+  object-fit:contain !important;
+}
+/* Kotak scene tidak terlalu menjulang */
+.a4-sheet .proof-figures.three .scene{ min-height:130px; max-height:190px; }
+
+/* ===== Sheet A4: layout 2 kolom, gambar besar ===== */
+.a4-sheet .proof-figures .proof-figure .scene { min-height: 170px; }
+.a4-sheet .proof-figures .proof-figure .scene img {
+  width: 100%; height: 100%; object-fit: contain; display: block;
+}
+
+/* ===== Panel kontrol icon-only ===== */
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;}
+.icon-only-title{font-size:22px;text-align:center;margin:0 0 10px 0;cursor:default;line-height:1;}
+.icon-row{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:12px;}
+.icon-btn{
+  width:46px;height:46px;border:none;border-radius:10px;background:#3498db;color:#fff;
+  font-size:17px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all .2s;box-shadow:0 2px 5px rgba(0,0,0,.15);
+}
+.icon-btn:hover:not(:disabled){transform:translateY(-2px);background:#2980b9;}
+.icon-btn:disabled{opacity:.5;cursor:not-allowed;}
+.pan-grid{display:grid;grid-template-columns:repeat(3,46px);grid-auto-rows:46px;gap:6px;justify-content:center;}
+.pan-grid .icon-btn.pan{background:#8e44ad;}
+.pan-grid .icon-btn.pan:hover:not(:disabled){background:#7d3c98;}
+
+/* ===== Fullscreen ===== */
+.ggb-wrap:fullscreen{background:#fff;overflow:auto;padding:24px;border-radius:0;}
+.ggb-wrap:fullscreen #ggb-element{min-height:52vh;}
+
+/* ===== Checkbox mode capture ===== */
+.capture-mode-label{display:inline-flex;align-items:center;gap:8px;margin:0 0 10px 0;font-size:13px;font-weight:600;color:#4a5568;cursor:pointer;}
+.capture-mode-label input{width:16px;height:16px;cursor:pointer;}
+
+/* ===== Sembunyikan tombol native GeoGebra (fallback CSS) ===== */
+#ggb-element button, #ggb-element [role="button"]{display:none !important;}
+
+.ggb-wrap.pseudo-fullscreen{
+  position:fixed; inset:0; z-index:9999; background:#fff;
+  overflow:auto; padding:16px; border-radius:0; margin:0; max-width:none;
+}
+.ggb-wrap.pseudo-fullscreen #ggb-element{ min-height:52vh; }

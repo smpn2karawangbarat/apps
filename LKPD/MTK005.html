@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LKPD MTK-005 — Berpangkat, Akar, Pythagoras</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+<style>
+.hidden{display:none!important}
+.input-correct{border-color:#10b981!important;background:#ecfdf5!important;color:#047857!important;font-weight:700}
+.input-wrong{border-color:#ef4444!important;background:#fef2f2!important;color:#b91c1c!important;font-weight:700}
+.q-ans{width:74px;padding:5px;border:1.5px solid #cbd5e1;border-radius:8px;text-align:center;font-weight:600}
+.step-row{display:flex;align-items:center;flex-wrap:wrap;gap:4px;margin-bottom:8px;font-size:14px}
+.q-bs{background:#f1f5f9;color:#64748b;border:1.5px solid #cbd5e1;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer}
+.q-bs.sel{border-width:2px}
+.q-bs.sel[data-v="Benar"]{background:#dbeafe;color:#1e40af;border-color:#3b82f6}
+.q-bs.sel[data-v="Salah"]{background:#fce7f3;color:#be185d;border-color:#ec4899}
+.q-bs:disabled{opacity:.85;cursor:not-allowed}
+.mc-option{background:#fff;transition:all .15s}
+.mc-option.selected{background:#dbeafe;border-color:#3b82f6}
+.mc-option.correct{background:#dcfce7!important;border-color:#10b981!important}
+.mc-option.wrong{background:#fee2e2!important;border-color:#ef4444!important}
+.mc-option.show-correct{background:#ecfdf5!important;border-color:#10b981!important;outline:2px solid #10b981}
+.pbtn{width:26px;height:26px;border-radius:7px;border:1.5px solid #cbd5e1;background:#f1f5f9;color:#64748b;font-weight:800;font-size:11px;cursor:pointer}
+.pbtn.active{background:#0f766e;color:#fff}
+.pbtn.tunda{background:#ede9fe;color:#6d28d9}
+.pbtn.done{background:#dcfce7;color:#15803d}
+.ans-mark{font-size:11px;margin-left:2px}
+.timer{font-weight:700;font-size:18px;color:#dc2626}
+.radwrap{display:inline-flex;align-items:stretch;font-weight:700;color:#0f172a}
+.rad{display:inline-block;border-top:2px solid #334155;padding:0 4px;margin-left:1px}
+.rad .q-ans{width:46px}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 6px}
+.frac .num{border-bottom:2px solid #334155;padding:2px 8px;display:flex;gap:4px;align-items:center;flex-wrap:wrap}
+.frac .den{padding:2px 8px}
+</style>
+</head>
+<body class="bg-slate-100 min-h-screen p-3 md:p-6">
+<div id="main" class="hidden max-w-5xl mx-auto space-y-6">
+<header class="bg-gradient-to-r from-indigo-800 to-blue-800 text-white rounded-3xl p-6">
+  <h1 class="text-2xl font-extrabold">BERPANGKAT • AKAR • PYTHAGORAS</h1>
+  <div class="flex gap-4 mt-2 text-sm"><span id="id-nama"></span><span id="id-kelas"></span><span id="id-kat"></span></div>
+</header>
+
+<!-- KEGIATAN 1 -->
+<section class="bg-white rounded-3xl p-6 border space-y-4">
+  <div class="flex justify-between items-center"><h2 class="text-lg font-bold">🃏 Keg 1: Rasionalisasi</h2><button id="lock-1" class="text-xs px-3 py-1 rounded-full bg-slate-200 font-bold">🔓 Kunci</button></div>
+  <div id="k1-cards" class="space-y-4"></div>
+  <div id="k1-bs" class="bg-slate-50 p-4 rounded-2xl border space-y-2"></div>
+</section>
+
+<!-- KEGIATAN 2 -->
+<section class="bg-white rounded-3xl p-6 border space-y-4">
+  <div class="flex justify-between items-center"><h2 class="text-lg font-bold">⛰️ Keg 2: Bukit & Terowongan</h2><button id="lock-2" class="text-xs px-3 py-1 rounded-full bg-slate-200 font-bold">🔓 Kunci</button></div>
+  <div id="k2-problem" class="bg-teal-50 p-4 rounded-2xl text-sm"></div>
+  <div id="k2-svg" class="flex justify-center"></div>
+  <div id="k2-scaffold" class="bg-teal-50/50 p-4 rounded-2xl text-sm space-y-2"></div>
+</section>
+
+<div class="flex justify-center"><button id="btn-evaluate" class="w-full sm:w-2/3 py-3 bg-indigo-600 text-white rounded-2xl font-extrabold">📝 Cek Nilai & Evaluasi</button></div>
+<div id="score-card" class="hidden bg-white rounded-3xl p-6 border-2 border-indigo-500 text-center space-y-3">
+  <div class="text-4xl font-black text-indigo-800" id="score-val">0</div>
+  <div id="score-break" class="text-xs text-left bg-slate-50 p-3 rounded-xl"></div>
+  <button id="btn-kirim-lkpd" class="w-full py-3 bg-sky-600 text-white rounded-2xl font-extrabold">📤 Kirim Nilai LKPD</button>
+</div>
+
+<div id="quiz-locked" class="bg-white rounded-3xl p-6 border text-center"><div class="text-4xl">🔒</div><h3 class="font-extrabold">Kuis Terkunci</h3><p class="text-sm">Terbuka setelah Nilai LKPD terkirim.</p></div>
+
+<div id="game-root" class="hidden bg-white rounded-3xl shadow-xl overflow-hidden">
+  <div class="p-3 flex justify-between items-center border-b">
+    <div id="g-dots" class="flex gap-1 flex-wrap"></div>
+    <div class="text-right"><div class="timer" id="g-timer">40:00</div><div id="g-ot" class="hidden text-[11px] font-bold text-purple-700">⚡ TAMBAHAN</div></div>
+  </div>
+  <div id="g-area" class="p-4 bg-slate-50 min-h-[360px] overflow-y-auto"></div>
+  <div class="p-3 border-t space-y-2">
+    <div id="g-fill" class="text-xs text-center text-slate-500 font-semibold"></div>
+    <div id="g-msg" class="text-xs text-center font-semibold"></div>
+    <div class="flex gap-2" id="g-play"><button id="g-tunda" class="flex-1 py-2 rounded-xl text-white font-bold" style="background:#7c3aed">⏭ Tunda</button><button id="g-cek" class="flex-2 px-6 py-2 rounded-xl text-white font-bold" style="background:#0f766e">CEK</button></div>
+    <div class="hidden" id="g-next"><button id="g-lanjut" class="w-full py-2 rounded-xl text-white font-bold" style="background:#0f766e">LANJUT →</button></div>
+    <button id="g-finish" class="w-full py-2 rounded-xl text-white font-extrabold bg-green-600 disabled:bg-slate-300" disabled>📤 Akhiri & Kirim</button>
+  </div>
+</div>
+<div id="g-success" class="hidden bg-white rounded-3xl p-8 text-center"><div class="text-5xl">✅</div><h2 class="font-extrabold">Selesai!</h2><div class="text-3xl font-black text-green-600" id="g-saved">0</div><button id="g-exit" class="mt-4 px-6 py-3 bg-slate-500 text-white rounded-xl font-bold">🚪 Keluar / Tutup</button></div>
+</div>
+
+<script src="lib/config.js"></script>
+<script src="core/APP_STATE.js"></script>
+<script src="core/EVENT_HANDLERS.js"></script>
+<script src="core/SCORING_LOGIC.js"></script>
+<script src="core/SVG_GENERATORS.js"></script>
+<script src="core/FUNCTIONS_RENDER.js"></script>
+<script src="data/DATA_POOL.js"></script>
+<script src="data/Mesin_Kisi.js"></script>
+<script src="core/PLAIN.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded',async()=>{
+const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
+const SC=LKPD_SCORING,SV=LKPD_SVG,R=LKPD_RENDER;
+const PICK=a=>a[Math.floor(Math.random()*a.length)],RI=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+const shuffle=a=>{const r=[...a];for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]];}return r;};
+const fmtN=v=>String(SC.r6(v));
+const pad=n=>String(n).padStart(2,'0');
+const fmtSec=s=>{s=Math.max(0,Math.floor(s));return pad(Math.floor(s/60))+':'+pad(s%60);};
+
+// ===== BOOT =====
+const boot=await LKPD.init({kode:'MTK-005',sections:['LKPD','KUIS']});
+if(!boot.ok){document.body.innerHTML='<div class="p-8 text-center text-red-600 font-bold">'+(boot.msg||'Akses ditolak')+'</div>';return;}
+const U=boot.user,KAT=U.kategori;
+$('#id-nama').textContent=U.nama;$('#id-kelas').textContent=U.kelas;$('#id-kat').textContent='Kat '+KAT;
+$('#main').classList.remove('hidden');
+
+// ===== SALT & SEED per posisi =====
+const st0=LKPD.load();const SALT=st0.salt||(Date.now()%2147483647);if(!st0.salt)LKPD.save({salt:SALT});
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function seeded(pos){const old=Math.random;Math.random=mulberry32((SALT^((pos+1)*7919))>>>0);return()=>{Math.random=old;};}
+
+// ===== GENERATOR LOKAL (kunci eksak) =====
+function mkOpts(correct,spread){const s=spread||[2,3,5];const set=[correct];const out=[{val:correct,correct:true}];s.forEach(d=>{const v=SC.r6(correct+d);if(!set.includes(v)){set.push(v);out.push({val:v,correct:false});}});let e=1;while(out.length<4){const v=SC.r6(correct-e);if(!set.includes(v)){set.push(v);out.push({val:v,correct:false});}e++;}return shuffle(out);}
+const gPangkat=d=>{const p=PICK([2,3,5]);const e1=RI(2,4),e2=RI(1,3),e3=RI(1,4);const N=e1*e2+e3;return{type:'mc',tex:`(${p}^{${e1}})^{${e2}}\\times ${p}^{${e3}}`,options:mkOpts(N,[1,2,3]).map(o=>({val:`${p}^{${o.val===N?N:o.val}}`,correct:o.correct}))};};
+// ===== PENGECOH AKAR MANDIRI (dijamin 4 opsi berbeda) =====
+function akarAlts(key) {
+  const out = [];
+  const m = String(key).match(/^(\d+)\\sqrt\{(\d+)\}$/);      // bentuk c√r
+  if (m) {
+    const c = +m[1], r = +m[2];
+    out.push((c + 2) + '\\sqrt{' + r + '}');
+    if (c > 2) out.push((c - 2) + '\\sqrt{' + r + '}');
+    out.push(c + '\\sqrt{' + (r + 1) + '}');
+    out.push((c * 2) + '\\sqrt{' + r + '}');
+  } else if (/\\sqrt/.test(key) && /[+-]/.test(key)) {         // binomial akar
+    out.push(key.includes('-') ? key.replace('-', '+') : key.replace('+', '-'));
+    out.push(key.replace(/(\d+)\\sqrt\{/, (mm, d) => (2 * +d) + '\\sqrt{'));
+    out.push(key.replace(/\\sqrt\{(\d+)\}/, (mm, r) => '\\sqrt{' + (+r + 2) + '}'));
+  } else {
+    const n = +key;                                            // bilangan bulat
+    if (!isNaN(n)) out.push(String(n + 5), String(n * 2), n + '\\sqrt{2}', String(n - 5 > 0 ? n - 5 : n + 10));
+  }
+  const seen = [key], res = [];
+  out.forEach(a => { if (a && a !== key && !seen.includes(a)) { seen.push(a); res.push(a); } });
+  return res.slice(0, 3);
+}
+
+const gAkar = d => {
+  const pool = DATA_POOL.m013.pool[d] || DATA_POOL.m013.pool.M;
+  const it = PICK(pool);
+  const opts = [{ val: it.key, correct: true }];
+  akarAlts(it.key).forEach(a => opts.push({ val: a, correct: false }));
+  return { type: 'mc', tex: it.t, options: shuffle(opts), total: 1 };
+};
+const gBaku=q=>{const m=RI(1,9)+'.'+RI(10,99);const n=RI(3,7);const val=Math.round(parseFloat(m)*Math.pow(10,n));const key=m+'\\times10^{'+n+'}';const alts=[(parseFloat(m)*10).toFixed(1)+'\\times10^{'+(n-1)+'}',(parseFloat(m)/10).toFixed(2)+'\\times10^{'+(n+1)+'}',parseFloat(m).toFixed(1)+'\\times10^{'+(n+1)+'}'];return{type:'mc',tex:String(val),options:shuffle([{val:key,correct:true},...alts.map(a=>({val:a,correct:false}))])};};
+const gRumus=()=>{const cor={C:['a²+b²=c²','c=√(a²+b²)'],B:['a²+c²=b²','b=√(a²+c²)'],A:['b²+c²=a²','a=√(b²+c²)']};const V=['A','B','C'];const items=[];for(let i=0;i<10;i++){const v=PICK(V);const ok=i<5;items.push({txt:`Siku di ${v}: ${ok?PICK(cor[v]):PICK(cor[PICK(V.filter(x=>x!==v))])}`,ok});}return{type:'bs',items:shuffle(items),total:10};};
+const gJenis=()=>{const P=DATA_POOL.m022.pool;const all=[...P.M,...P.S,...P.U];const rows=[];for(let i=0;i<10;i++)rows.push(PICK(all));return{type:'t5',rows,total:40};};
+function figF4(s){ // △ABC siku di B + △ACD siku di C (rantai sisi siku)
+  const [ab,bc,ac,ad,cd]=s;
+  const ux=-bc/ac,uy=-ab/ac,px=-uy,py=ux;
+  const dx=bc+px*cd,dy=py*cd;
+  return SV.svgBuild({
+    lines:[{p:[0,0,0,-ab]},{p:[0,0,bc,0]},{p:[0,-ab,bc,0],stroke:'#0284c7',w:2.5},
+           {p:[bc,0,dx,dy],stroke:'#e11d48',w:2.5,dash:1},{p:[0,-ab,dx,dy],stroke:'#0284c7',w:2.5}],
+    polys:[{pts:[[0,0],[0,-ab],[bc,0]]}],
+    marks:[SV.raMark([0,0],[0,-ab],[bc,0],Math.min(ab,bc)*0.15),SV.raMark([bc,0],[0,-ab],[dx,dy],cd*0.18)],
+    dots:[{x:0,y:-ab},{x:0,y:0},{x:bc,y:0},{x:dx,y:dy,c:'#e11d48'}],
+    labels:[{x:0,y:-ab/2,t:fmtN(ab),c:'#0284c7',ox:-16},{x:bc/2,y:0,t:fmtN(bc),c:'#0284c7',oy:14},
+            {x:dx/2,y:(-ab+dy)/2,t:fmtN(ad),c:'#0284c7',ox:10,oy:-8},
+            {x:0,y:-ab,t:'A',ox:-8,oy:-6},{x:0,y:0,t:'B',ox:-8,oy:12},{x:bc,y:0,t:'C',ox:2,oy:12},{x:dx,y:dy,t:'D',ox:10}]
+  });
+}
+function gGab(fig){
+  const P=DATA_POOL.m023.pool;
+  const all=[...P.M,...P.S,...P.U].filter(x=>x.fig===fig);
+  const it=all.length?PICK(all):PICK(P.M);const s=it.seed;
+  const J={
+    F1:'△ABC siku-siku di B (AB & BC diketahui); △ACD siku-siku di C (CD diketahui). Cari AC lalu AD!',
+    F2:'AE ⊥ BD di E dan CD ⊥ BD di D (AE, AB, CD, BC diketahui). Cari BE, BD, lalu ED = BD − BE!',
+    F3:'△LTM siku-siku di T (LT, LM diketahui); △TMR siku-siku di M (MR diketahui). Cari v = TM lalu x = TR!',
+    F4:'△ABC siku-siku di B (AB, BC diketahui); △ACD siku-siku di C dengan sisi miring AD. Cari AC lalu CD!',
+    F5:'Segitiga sama kaki: dua sisi miring sama panjang, alas diketahui. Cari tinggi t dan setengah alas!'
+  }[fig]||'';
+  if(fig==='F1'){const[ab,bc,ac,cd,ad]=s;return{type:'mc2',petunjuk:J,svg:SV.buildF1(...s),questions:[{label:'AC',options:mkOpts(ac)},{label:'AD',options:mkOpts(ad)}],total:2};}
+  if(fig==='F2'){const[ae,ab,dc,bc,be,bd,ed]=s;return{type:'mc3',petunjuk:J,svg:SV.buildF2(...s),questions:[{label:'BE',options:mkOpts(be)},{label:'BD',options:mkOpts(bd)},{label:'ED',options:mkOpts(ed)}],total:3};}
+  if(fig==='F3'){const[t,m,a,v,x]=s;return{type:'mc2',petunjuk:J,svg:SV.buildF3(...s),questions:[{label:'v',options:mkOpts(v)},{label:'x',options:mkOpts(x)}],total:2};}
+  if(fig==='F4'){const[ab,bc,ac,ad,cd]=s;return{type:'mc2',petunjuk:J,svg:figF4(s),questions:[{label:'AC',options:mkOpts(ac)},{label:'CD',options:mkOpts(cd)}],total:2};}
+  const[sl,b,t]=s;return{type:'mc2',petunjuk:J,svg:SV.buildF4(sl,b,t),questions:[{label:'tinggi t',options:mkOpts(t)},{label:'setengah alas',options:mkOpts(b/2)}],total:2};
+}
+
+// ===== KEGIATAN 1 =====
+const K1PAT={A:['M','S','U','U','S','U'],B:['M','M','S','S','S','U'],C:['M','M','M','S','S','U']};
+let k1Cards=[],k1BS=[];
+// ===== RENDER TEMPLATE JAWABAN SEBAGAI HTML BIASA =====
+function tplToHTML(tpl, ci) {
+  let i = 0;
+  // 1) √{2} → √{{2}}  (angka di dalam √ adalah placeholder kunci, bukan literal)
+  let h = tpl.replace(/\\sqrt\{(\d+)\}/g, '\\sqrt{{$1}}');
+  // 2) {n} → input jawaban
+  h = h.replace(/\{(\d+)\}/g, () =>
+    `<input type="text" inputmode="decimal" class="q-ans" id="k1-c${ci}-k${i++}">`);
+  // 3) \sqrt{...} → √ dengan garis atas (vinculum)
+  h = h.replace(/\\sqrt\{([^{}]*)\}/g,
+    '<span class="radwrap">√<span class="rad">$1</span></span>');
+  // 4) \frac{...}{...} → pecahan bertumpuk
+  h = h.replace(/\\frac\{([^{}]*)\}\{([^{}]*)\}/g,
+    '<span class="frac"><span class="num">$1</span><span class="den">$2</span></span>');
+  return h;
+}
+function renderK1(){
+  k1Cards=K1PAT[KAT].map(d=>PICK(DATA_POOL.m014.pool[d]));
+ $('#k1-cards').innerHTML = k1Cards.map((c, ci) => {
+  return `<div class="bg-slate-50 border rounded-2xl p-4">
+    <b>Kartu ${'ABCDEF'[ci]}</b> <span class="k1t" data-tex="${c.t}"></span>
+    <div class="step-row mt-2" style="font-size:16px">= ${tplToHTML(c.tpl, ci)}</div>
+  </div>`;
+}).join('');
+  $$('.k1t').forEach(el=>{try{katex.render(el.dataset.tex,el,{throwOnError:false});}catch(e){}});
+  const vals=k1Cards.map(c=>c.v);const L='ABCDEF';
+  const mi=vals.indexOf(Math.min(...vals)),ma=vals.indexOf(Math.max(...vals));
+  const pool=[{txt:`Hasil Kartu ${L[mi]} paling kecil.`,ok:true},{txt:`Hasil Kartu ${L[ma]} paling besar.`,ok:true},{txt:`Hasil Kartu ${L[mi]} paling besar.`,ok:false},{txt:`Hasil Kartu ${L[ma]} paling kecil.`,ok:false}];
+  for(let a=0;a<6;a++)for(let b=a+1;b<6;b++){pool.push({txt:`Hasil ${L[a]} > ${L[b]}.`,ok:vals[a]>vals[b]});pool.push({txt:`Selisih ${L[a]} & ${L[b]} < 1.`,ok:Math.abs(vals[a]-vals[b])<1});}
+  k1BS=shuffle(pool).slice(0,4);
+  $('#k1-bs').innerHTML='<b>Jawab 4 pernyataan B/S:</b>'+k1BS.map((s,i)=>`<div class="flex items-center gap-2 border rounded-xl p-2 bg-white"><span class="flex-1 text-sm">${s.txt}</span><button class="q-bs" data-i="${i}" data-v="Benar">✅ Benar</button><button class="q-bs" data-i="${i}" data-v="Salah">❌ Salah</button></div>`).join('');
+  R.wireBS('#k1-bs');
+  $$('.k1t').forEach(el=>{});
+}
+// ===== KEGIATAN 2 =====
+let k2seed=null,k2keys=[];
+function renderK2(){
+  k2seed=PICK(DATA_POOL.K2.pool[KAT]);const[ea,ed,od]=k2seed;
+  const eo=SC.r6(Math.sqrt(ed*ed-od*od)),ao=SC.r6(Math.sqrt(ea*ea-eo*eo)),ad=SC.r6(ao+od),by=SC.r6(ad*2);
+  k2keys=[ed,od,SC.r6(ed*ed),SC.r6(od*od),SC.r6(eo*eo),SC.r6(eo*eo),eo,ea,eo,SC.r6(ea*ea),SC.r6(eo*eo),SC.r6(ao*ao),SC.r6(ao*ao),ao,ao,od,ad,by];
+  $('#k2-problem').innerHTML=`EA=${ea}, ED=${ed}, OD=${od}. Hitung EO, AO, AD, Biaya (Rp2 jt/m).`;
+  $('#k2-svg').innerHTML=SV.buildF7(ea,ed,od);
+  const IN=`<input type="text" inputmode="decimal" class="q-ans">`;
+  $('#k2-scaffold').innerHTML=`<div class="step-row">EO²=ED²−OD²</div><div class="step-row">EO²=${IN}²−${IN}²</div><div class="step-row">EO²=${IN}−${IN}</div><div class="step-row">=${IN}</div><div class="step-row">EO=√${IN}=${IN}</div><div class="step-row">AO²=EA²−EO²</div><div class="step-row">AO²=${IN}²−${IN}²</div><div class="step-row">AO²=${IN}−${IN}</div><div class="step-row">=${IN}</div><div class="step-row">AO=√${IN}=${IN}</div><div class="step-row">AD=AO+OD=${IN}+${IN}=${IN}</div><div class="step-row">Biaya=AD×2=${IN}</div>`;
+  $$('#k2-scaffold .q-ans').forEach((e,i)=>e.id='k2-'+i);
+}
+// ===== EVALUASI LKPD =====
+let submitted=false,finalScore=0;
+function evaluate(){
+  let k1raw=0;
+  k1Cards.forEach((c,ci)=>{let cor=0;c.k.forEach((kv,k)=>{const el=$('#k1-c'+ci+'-k'+k);const n=SC.normNum(el.value);const ok=n!==null&&SC.near(n,kv);el.classList.add(ok?'input-correct':'input-wrong');if(ok)cor++;});k1raw+=(cor/c.k.length)*7;});
+  let bsOk=0;k1BS.forEach((s,i)=>{const sel=document.querySelector(`#k1-bs .q-bs.sel[data-i="${i}"]`);if(sel&&sel.dataset.v===(s.ok?'Benar':'Salah'))bsOk++;});
+  k1raw+=bsOk*2;
+  let k2ok=0;$$('#k2-scaffold .q-ans').forEach((e,i)=>{const n=SC.normNum(e.value);const ok=n!==null&&SC.near(n,k2keys[i]);e.classList.add(ok?'input-correct':'input-wrong');if(ok)k2ok++;});
+  const k2raw=k2ok/k2keys.length*50;
+  finalScore=Math.min(100,Math.round(k1raw+k2raw));
+  $('#score-val').textContent=finalScore;
+  $('#score-break').innerHTML=`Keg1: ${Math.round(k1raw)}/50 • Keg2: ${Math.round(k2raw)}/50 • B/S: ${bsOk}/4`;
+  $('#score-card').classList.remove('hidden');
+}
+$('#btn-evaluate').onclick=evaluate;
+/* ===== HELPER: Kirim dengan retry otomatis untuk status 'busy' ===== */
+async function kirimDenganRetry(payload, btnEl, statusEl) {
+  if (btnEl) { btnEl.disabled = true; btnEl.textContent = '⏳ Mengirim...'; }
+  let attempts = 0, last = null;
+  while (attempts < 5) {
+    try {
+      const r = await fetch(CFG.GS_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      }).then(r => r.json());
+      last = r;
+      if (r.status === 'ok') {
+        if (statusEl) {
+          statusEl.textContent = '✅ Nilai LKPD terkirim.';
+          statusEl.className = 'text-xs text-green-700 font-bold';
+        }
+        if (btnEl) { btnEl.textContent = '✅ Terkirim'; btnEl.style.background = '#16a34a'; }
+        return r;
+      }
+      if (r.status === 'busy') {
+        attempts++;
+        if (statusEl) statusEl.textContent = `⏳ Server sibuk, coba lagi (${attempts}/5)...`;
+        await new Promise(ok => setTimeout(ok, 600));
+        continue;
+      }
+      break; // status error lain → keluar
+    } catch (e) {
+      attempts++;
+      if (statusEl) statusEl.textContent = `⏳ Retry ${attempts}/5...`;
+      await new Promise(ok => setTimeout(ok, 600));
+    }
+  }
+  if (btnEl) { btnEl.disabled = false; btnEl.textContent = '📤 Kirim Nilai LKPD ke Guru'; }
+  if (statusEl) {
+    statusEl.textContent = '❌ Gagal mengirim (' + (last ? last.msg || last.status : 'network error') + ')';
+    statusEl.className = 'text-xs text-rose-600';
+  }
+  return null;
+}
+
+/* ===== HANDLER TOMBOL KIRIM LKPD ===== */
+$('#btn-kirim-lkpd').onclick = async () => {
+  if (submitted) return;
+  
+  // Ambil username dari state (sudah terisi saat validateAccess)
+    let username = LKPD.state.user ? LKPD.state.user.username : '';
+  if (!username) {
+    try {
+      const ds = JSON.parse(localStorage.getItem('DIRECT_SESSION') || 'null');
+      if (ds && ds.username) username = ds.username;
+    } catch (e) {}
+  }
+  console.log('[KIRIM-LKPD] username:', username, 'user state:', LKPD.state.user);
+  
+  if (!username) {
+    LKPD.toast('❌ Username tidak tersedia. Refresh halaman.');
+    return;
+  }
+  
+  const payload = {
+    tipe: 'LKPD',
+    kode: 'MTK-005',
+    username: username,                    // ✅ WAJIB ADA
+    nama1: LKPD.state.user.nama,
+    kelas: LKPD.state.user.kelas,
+    kategori: LKPD.state.user.kategori,
+    nama2: (LKPD.state.access && LKPD.state.access.pair) ? LKPD.state.access.pair.nama2 : '-',
+    username2: (LKPD.state.access && LKPD.state.access.pair) ? LKPD.state.access.pair.username2 : '',
+    jawaban:buildK1Jawaban(),
+    waktuPengerjaan: '-',
+    percobaan: 1,
+    autoNilai: finalScore,
+    totalSoal: 78
+  };
+  
+  console.log('[KIRIM-LKPD] payload:', payload);
+  LKPD.showLoader('Mengirim...');
+  
+  // Kirim dengan retry otomatis untuk status 'busy'
+  let attempts = 0, last = null;
+  while (attempts < 5) {
+    try {
+      const r = await fetch(CFG.GS_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      }).then(res => res.json());
+      last = r;
+      if (r.status === 'ok') {
+        LKPD.hideLoader();
+        submitted = true;
+        LKPD.save({ submittedLKPD: true, finalScore });
+        $('#btn-kirim-lkpd').textContent = '✅ Terkirim';
+        $('#btn-kirim-lkpd').style.background = '#16a34a';
+        $('#btn-kirim-lkpd').disabled = true;
+        unlockKuis();
+        return;
+      }
+      if (r.status === 'busy') {
+        attempts++;
+        LKPD.toast(`⏳ Server sibuk (${attempts}/5)...`);
+        await new Promise(ok => setTimeout(ok, 600));
+        continue;
+      }
+      break;
+    } catch (e) {
+      attempts++;
+      await new Promise(ok => setTimeout(ok, 600));
+    }
+  }
+  
+  LKPD.hideLoader();
+  LKPD.toast('❌ Gagal: ' + (last ? last.msg || last.status : 'network error'));
+};
+function unlockKuis(){$('#quiz-locked').classList.add('hidden');$('#game-root').classList.remove('hidden');initGame();}
+
+// ===== KUIS 23 posisi =====
+const DEFS=[...Array(6).fill({t:'q1'}),...Array(6).fill({t:'q2'}),...Array(4).fill({t:'q3'}),{t:'q4'},{t:'q5'},{t:'q6'},{t:'q7'},{t:'q8'},{t:'q9'},{t:'q10'}];
+const BOBOT=i=>{const t=DEFS[i].t;return{q1:10/6,q2:10/6,q3:10/4,q4:10,q5:10,q6:10,q7:10,q8:10,q9:10,q10:10}[t];};
+// MODE DEBUG: aktif hanya bila URL memuat ?debug=W2026 (ganti rahasia Anda)
+const DEBUG = new URLSearchParams(location.search).get('debug') === 'W2026';
+const GC = DEBUG ? { TOTAL: 120, MIN: 0, OT: 60 } : { TOTAL: 2400, MIN: 1200, OT: 600 };
+let G={cur:0,timeLeft:GC.TOTAL,timer:null,used:0,ot:false,otLeft:0,scores:Array(23).fill(null),status:Array(23).fill('open'),fill:Array(23).fill(null),order:shuffle([...Array(23).keys()]),curQ:null,audit:{},phase:'game'};
+// ===== LKPD: K1 kartu + KP pernyataan + K2 scaffold =====
+const k2label = { K21: 'EO²=ED²−OD²', K22: 'AO²=EA²−EO²', K23: 'AD=AO+OD;Biaya=AD×2' };
+function buildK1Jawaban() {
+  const P = window.PLAIN, SC = LKPD_SCORING, parts = [];
+  k1Cards.forEach((c, ci) => {
+    const flds = []; let all = true;
+    c.k.forEach((kv, k) => {
+      const el = document.getElementById('k1-c' + ci + '-k' + k);
+      const v = el ? el.value.trim() : '';
+      const n = SC.normNum(v); const ok = n !== null && SC.near(n, kv);
+      if (!ok) all = false;
+      flds.push((v || '_') + P.fmark(ok));
+    });
+    parts.push('K1' + 'ABCDEF'[ci] + ':' + P.S(P.plainTex(c.t)) + ':' + flds.join(',') + ',' + P.qmark(all));
+  });
+  k1BS.forEach((s, i) => {
+    const sel = document.querySelector('#k1-bs .q-bs.sel[data-i="' + i + '"]');
+    const ch = sel ? sel.dataset.v : '_';
+    const ok = !!sel && ch === (s.ok ? 'Benar' : 'Salah');
+    parts.push('KP' + (i + 1) + ':' + P.S(s.txt) + ':' + (ch === 'Benar' ? 'B' : ch === 'Salah' ? 'S' : '_') + P.fmark(ok) + ',' + P.qmark(ok));
+  });
+  const els = [...document.querySelectorAll('#k2-scaffold .q-ans')];
+  [[0, 6, 'K21'], [7, 14, 'K22'], [15, 17, 'K23']].forEach(g => {
+    const st = []; let all = true;
+    for (let i = g[0]; i <= g[1]; i++) {
+      const v = els[i] ? els[i].value.trim() : '';
+      const n = SC.normNum(v); const ok = n !== null && SC.near(n, k2keys[i]);
+      if (!ok) all = false;
+      st.push((v || '_') + P.fmark(ok));
+    }
+    parts.push(g[2] + ':' + P.S(k2label[g[2]]) + ':' + st.join(';') + ',' + P.qmark(all));
+  });
+  return parts.join('|');
+}
+
+// ===== KUIS: tangkap per soal saat CEK (indeks = urutan awal) =====
+function captureAudit(fixed) {
+  G.audit = G.audit || {}; 
+  const P = window.PLAIN, SC = LKPD_SCORING, q = G.curQ, num = fixed + 1, E = [];
+  if (q.type === 'mc') {
+    const sel = document.querySelector('#g-area .mc-radio:checked');
+    const opt = sel ? q.options[+sel.value] : null;
+    const ok = !!opt && opt.correct;
+    E.push({ id: 'Q' + num, body: P.S(P.plainTex(q.tex || '')) + ':' + (opt ? P.plainTex(opt.val) : '_') + P.fmark(ok) + ',' + P.qmark(ok) });
+  } else if (q.type === 'mc2' || q.type === 'mc3') {
+    q.questions.forEach((qq, i) => {
+      const sel = document.querySelector('#g-area [name="mc' + (i + 1) + '"]:checked');
+      const opt = sel ? qq.options[+sel.value] : null;
+      const ok = !!opt && opt.correct;
+      E.push({ id: 'Q' + num + 'ABC'[i], body: P.S(qq.label + '=') + ':' + (opt ? String(opt.val) : '_') + P.fmark(ok) + ',' + P.qmark(ok) });
+    });
+  } else if (q.type === 'bs') {
+    q.items.forEach((it, i) => {
+      const sel = document.querySelector('#g-area [data-bs-row="' + i + '"] .q-bs.sel');
+      const ch = sel ? sel.dataset.v : '_';
+      const ok = !!sel && ch === (it.ok ? 'Benar' : 'Salah');
+      E.push({ id: 'Q' + num + (i + 1), body: P.S(it.txt) + ':' + (ch === 'Benar' ? 'B' : ch === 'Salah' ? 'S' : '_') + P.fmark(ok) + ',' + P.qmark(ok) });
+    });
+  } else if (q.type === 't5') {
+    const all = $$('#g-area .q-ans'), sels = $$('#g-area .q-sel');
+    q.rows.forEach((r, i) => {
+      const sq = r.s.map(v => SC.r6(v * v)); const flds = []; let okAll = true;
+      for (let k = 0; k < 3; k++) {
+        const n = SC.normNum(all[i * 3 + k].value); const ok = n !== null && SC.near(n, sq[k]);
+        if (!ok) okAll = false; flds.push((all[i * 3 + k].value.trim() || '_') + P.fmark(ok));
+      }
+      const map = { siku: 'Siku-siku', lancip: 'Lancip', tumpul: 'Tumpul' };
+      const jok = sels[i].value === map[r.ans]; if (!jok) okAll = false;
+      flds.push((sels[i].value || '_') + P.fmark(jok));
+      E.push({ id: 'Q' + num + (i + 1), body: P.S('sisi ' + r.s.join(',')) + ':' + flds.join(',') + ',' + P.qmark(okAll) });
+    });
+  }
+  G.audit[fixed] = E;
+}
+
+function buildKuisJawaban() {
+  const out = [];
+  for (let d = 0; d < 23; d++) (G.audit[d] || []).forEach(e => out.push(e.id + ':' + e.body));
+  return out.join('|');
+}
+
+// ===== KUIS: tangkap per soal saat CEK (indeks = urutan awal) =====
+function captureAudit(fixed) {
+  const P = window.PLAIN, SC = LKPD_SCORING, q = G.curQ, num = fixed + 1, E = [];
+  if (q.type === 'mc') {
+    const sel = document.querySelector('#g-area .mc-radio:checked');
+    const opt = sel ? q.options[+sel.value] : null;
+    const ok = !!opt && opt.correct;
+    E.push({ id: 'Q' + num, body: P.S(P.plainTex(q.tex || '')) + ':' + (opt ? P.plainTex(opt.val) : '_') + P.fmark(ok) + ',' + P.qmark(ok) });
+  } else if (q.type === 'mc2' || q.type === 'mc3') {
+    q.questions.forEach((qq, i) => {
+      const sel = document.querySelector('#g-area [name="mc' + (i + 1) + '"]:checked');
+      const opt = sel ? qq.options[+sel.value] : null;
+      const ok = !!opt && opt.correct;
+      E.push({ id: 'Q' + num + 'ABC'[i], body: P.S(qq.label + '=') + ':' + (opt ? String(opt.val) : '_') + P.fmark(ok) + ',' + P.qmark(ok) });
+    });
+  } else if (q.type === 'bs') {
+    q.items.forEach((it, i) => {
+      const sel = document.querySelector('#g-area [data-bs-row="' + i + '"] .q-bs.sel');
+      const ch = sel ? sel.dataset.v : '_';
+      const ok = !!sel && ch === (it.ok ? 'Benar' : 'Salah');
+      E.push({ id: 'Q' + num + (i + 1), body: P.S(it.txt) + ':' + (ch === 'Benar' ? 'B' : ch === 'Salah' ? 'S' : '_') + P.fmark(ok) + ',' + P.qmark(ok) });
+    });
+  } else if (q.type === 't5') {
+    const all = $$('#g-area .q-ans'), sels = $$('#g-area .q-sel');
+    q.rows.forEach((r, i) => {
+      const sq = r.s.map(v => SC.r6(v * v)); const flds = []; let okAll = true;
+      for (let k = 0; k < 3; k++) {
+        const n = SC.normNum(all[i * 3 + k].value); const ok = n !== null && SC.near(n, sq[k]);
+        if (!ok) okAll = false; flds.push((all[i * 3 + k].value.trim() || '_') + P.fmark(ok));
+      }
+      const map = { siku: 'Siku-siku', lancip: 'Lancip', tumpul: 'Tumpul' };
+      const jok = sels[i].value === map[r.ans]; if (!jok) okAll = false;
+      flds.push((sels[i].value || '_') + P.fmark(jok));
+      E.push({ id: 'Q' + num + (i + 1), body: P.S('sisi ' + r.s.join(',')) + ':' + flds.join(',') + ',' + P.qmark(okAll) });
+    });
+  }
+  G.audit[fixed] = E;
+}
+
+function buildKuisJawaban() {
+  const out = [];
+  for (let d = 0; d < 23; d++) (G.audit[d] || []).forEach(e => out.push(e.id + ':' + e.body));
+  return out.join('|');
+}
+const diffN={A:3,B:2,C:1}[KAT];
+function loadQ(pos){
+  G.cur=pos;$('#g-play').classList.remove('hidden');$('#g-next').classList.add('hidden');
+  const done=seeded(pos);const t=DEFS[G.order[pos]].t;let q;
+  if(t==='q1')q=gPangkat(diffN);else if(t==='q2')q=gAkar({A:3,B:2,C:1}[KAT]===3?'U':{A:3,B:2,C:1}[KAT]===2?'S':'M');
+  else if(t==='q3')q=gBaku(RI(1,4));else if(t==='q4')q=gRumus();else if(t==='q5')q=gJenis();
+  else q=gGab({q6:'F1',q7:'F2',q8:'F3',q9:'F4',q10:'F5'}[t]);
+  G.curQ={...q,t};done();
+  let html=`<h3 class="font-extrabold text-indigo-800 mb-2">Soal ${pos+1}/23 • ${t.toUpperCase()} <span class="text-xs bg-indigo-100 px-2 rounded">Bobot ${BOBOT(pos).toFixed(2)}</span></h3>`;
+    if(q.petunjuk)html+=R.renderSoalBox(q.petunjuk);
+  if(q.svg)html+=R.renderSVG(q.svg);
+  if(q.type==='mc')html+=`<div class="text-lg mb-2 qtex" data-tex="${q.tex}"></div>`+R.renderMC(q.options,'mc');
+  if(q.type==='mc2')html+=R.renderMCGroup(q.questions);
+  if(q.type==='mc3')html+=R.renderMCGroup(q.questions);
+  if(q.type==='bs')html+=R.renderBS(q.items);
+  if(q.type==='t5')html+=q.rows.map((r,i)=>`<div class="bg-white border rounded-xl p-2 mb-2 text-sm">#${i+1} Sisi: ${r.s.join('-')}<div class="step-row">Kuadrat: <input class="q-ans" > <input class="q-ans"> <input class="q-ans"></div><select class="q-sel p-1 border rounded"><option value="">?</option><option>Siku-siku</option><option>Lancip</option><option>Tumpul</option></select></div>`).join('');
+  $('#g-area').innerHTML=html;
+  $$('#g-area .qtex').forEach(el=>{try{katex.render(el.dataset.tex,el,{throwOnError:false});}catch(e){}});
+  R.wireKatex('#g-area');   // ← render isi opsi .mc-tex (Q1/Q2/Q3)
+  R.wireMC('#g-area');R.wireBS('#g-area');
+  $$('#g-area .q-ans').forEach(e=>e.addEventListener('input',updateBtn));
+  restoreFill(pos);updateBtn();dots();
+}
+function fillStats(){
+  const ins=$$('#g-area .q-ans').length,sels=$$('#g-area .q-sel').length;
+  const bsG={};$$('#g-area .q-bs').forEach(b=>{bsG[b.dataset.i]=bsG[b.dataset.i]||false;if(b.classList.contains('sel'))bsG[b.dataset.i]=true;});
+  const mcG={};$$('#g-area .mc-radio').forEach(r=>{mcG[r.name]=mcG[r.name]||false;if(r.checked)mcG[r.name]=true;});
+  const t=ins+sels+Object.keys(bsG).length+Object.keys(mcG).length;
+  let f=Object.values(bsG).filter(x=>x).length+Object.values(mcG).filter(x=>x).length;
+  $$('#g-area .q-ans').forEach(e=>{if(e.value.trim())f++;});$$('#g-area .q-sel').forEach(e=>{if(e.value)f++;});
+  return{terisi:f,total:t};
+}
+function updateBtn(){
+  const st=fillStats();$('#g-fill').innerText=`Terisi ${st.terisi}/${st.total}`;
+  const bc=$('#g-cek');if(st.terisi<st.total){bc.disabled=true;bc.innerText=`ISI SEMUA (${st.terisi}/${st.total})`;}else{bc.disabled=false;bc.innerText='CEK';}
+  const fb=$('#g-finish');fb.disabled=G.used<GC.MIN;
+}
+window.updateBtn=updateBtn;
+function partialOf(q){
+  if(q.type==='mc'){const s=$('#g-area .mc-radio:checked');return s&&q.options[+s.value].correct?1:0;}
+  if(q.type==='mc2'||q.type==='mc3'){let c=0;q.questions.forEach((qq,i)=>{const s=$(`#g-area [name="mc${i+1}"]:checked`);if(s&&qq.options[+s.value].correct)c++;});return c/q.questions.length;}
+  if(q.type==='bs'){let c=0;q.items.forEach((it,i)=>{const sel=document.querySelector(`#g-area [data-bs-row="${i}"] .q-bs.sel`);if(sel&&sel.dataset.v===(it.ok?'Benar':'Salah'))c++;});return c/10;}
+  if(q.type==='t5'){let c=0;const all=$$('#g-area .q-ans');const sels=$$('#g-area .q-sel');q.rows.forEach((r,i)=>{const sq=r.s.map(v=>SC.r6(v*v));for(let k=0;k<3;k++){const n=SC.normNum(all[i*3+k].value);if(n!==null&&SC.near(n,sq[k]))c++;}const map={siku:'Siku-siku',lancip:'Lancip',tumpul:'Tumpul'};if(sels[i].value===map[r.ans])c++;});return c/40;}
+  return 0;
+}
+function markInputs(q){
+  if(q.type==='mc'){ $$('#g-area .mc-option').forEach((o,i)=>{o.classList.remove('correct','wrong','show-correct');if(q.options[i].correct)o.classList.add('show-correct');const r=o.querySelector('.mc-radio');if(r&&r.checked)o.classList.add(q.options[i].correct?'correct':'wrong');if(r)r.disabled=true;});return;}
+  if(q.type==='mc2'||q.type==='mc3'){q.questions.forEach((qq,i)=>{const rs=$$('#g-area [name="mc'+(i+1)+'"]');rs.forEach((r,x)=>{const o=r.closest('.mc-option');o.classList.remove('correct','wrong','show-correct');if(qq.options[x].correct)o.classList.add('show-correct');if(r.checked)o.classList.add(qq.options[x].correct?'correct':'wrong');r.disabled=true;});});return;}
+  if(q.type==='bs'){q.items.forEach((it,i)=>{const btns=[...document.querySelectorAll(`#g-area [data-bs-row="${i}"] .q-bs`)];const sel=btns.find(b=>b.classList.contains('sel'));const ok=sel&&sel.dataset.v===(it.ok?'Benar':'Salah');if(sel)sel.style.boxShadow=ok?'0 0 0 4px #86efac':'0 0 0 4px #fca5a5';btns.forEach(b=>b.disabled=true);});return;}
+  if(q.type==='t5'){const all=$$('#g-area .q-ans');const sels=$$('#g-area .q-sel');q.rows.forEach((r,i)=>{const sq=r.s.map(v=>SC.r6(v*v));for(let k=0;k<3;k++){const n=SC.normNum(all[i*3+k].value);const ok=n!==null&&SC.near(n,sq[k]);all[i*3+k].classList.add(ok?'input-correct':'input-wrong');}const map={siku:'Siku-siku',lancip:'Lancip',tumpul:'Tumpul'};sels[i].classList.add(sels[i].value===map[r.ans]?'input-correct':'input-wrong');});}
+}
+function captureFill(pos){G.fill[pos]={ins:[...$$('#g-area .q-ans')].map(e=>e.value),sel:[...$$('#g-area .q-sel')].map(e=>e.value)};}
+function restoreFill(pos){const f=G.fill[pos];if(!f)return;$$('#g-area .q-ans').forEach((e,i)=>e.value=f.ins[i]||'');$$('#g-area .q-sel').forEach((e,i)=>e.value=f.sel[i]||'');}
+function dots(){$('#g-dots').innerHTML='';for(let i=0;i<23;i++){const b=document.createElement('button');b.className='pbtn'+(i===G.cur?' active':'')+(G.status[i]==='checked'?' done':G.status[i]==='tunda'?' tunda':'');b.textContent=G.status[i]==='checked'?'✓':G.status[i]==='tunda'?'⏸':i+1;b.onclick=()=>{if(G.status[i]!=='checked'){captureFill(G.cur);loadQ(i);}};$('#g-dots').appendChild(b);}}
+$('#g-cek').onclick=()=>{
+  if(!confirm('Yakin? Tidak ada perbaikan.'))return;
+  const p=partialOf(G.curQ);G.scores[G.cur]=p;G.status[G.cur]='checked';
+  const tot=G.curQ.total||1;const benar=Math.round(p*tot);
+  $('#g-msg').innerText=`Benar ${benar}/${tot} • Skor +${(p*BOBOT(G.cur)).toFixed(2)}`;
+  $$('#g-area input,#g-area select,#g-area button').forEach(e=>e.disabled=true);
+  markInputs(G.curQ);captureAudit(G.order[G.cur]);dots();
+  $('#g-play').classList.add('hidden');$('#g-next').classList.remove('hidden');
+};
+$('#g-tunda').onclick=()=>{if(G.status[G.cur]==='open')G.status[G.cur]='tunda';captureFill(G.cur);const n=nextOpen();if(n>=0)loadQ(n);else dots();};
+$('#g-lanjut').onclick=()=>{const n=nextOpen();if(n>=0)loadQ(n);else LKPD.toast('Semua selesai — tunggu 20:00 untuk kirim');};
+function nextOpen(){for(let k=1;k<=23;k++){const i=(G.cur+k)%23;if(G.status[i]!=='checked')return i;}return -1;}
+$('#g-finish').onclick=()=>{if(confirm('Akhiri & kirim kuis?'))autoSubmit(false);};
+function startT(){if(G.timer)return;G.timer=setInterval(()=>{G.used++;
+  if(!G.ot){G.timeLeft--;$('#g-timer').innerText=fmtSec(G.timeLeft);if(G.timeLeft<=0){mainUp();return;}}
+  else{G.otLeft--;$('#g-ot').innerText='⚡ '+fmtSec(G.otLeft);if(G.otLeft<=0){pauseT();autoSubmit(true);return;}}
+  if(G.used>=GC.MIN&&G.scores.every(s=>s!==null)){pauseT();autoSubmit(false);return;}
+  updateBtn();},1000);}
+function pauseT(){clearInterval(G.timer);G.timer=null;}
+function mainUp(){pauseT();G.ot=true;G.otLeft=GC.OT;$('#g-timer').innerText='⏰ HABIS';$('#g-ot').classList.remove('hidden');startT();}
+async function autoSubmit(byOT) {
+  G.phase = 'done'; pauseT();
+  const f = Math.round(G.scores.reduce((s, p, i) => s + (p || 0) * BOBOT(i), 0));
+  const payload = {
+    tipe: 'KUIS',
+    kode: 'MTK-005',
+    username: LKPD.state.user.username,           // ✅ TAMBAH INI
+    nama1: LKPD.state.user.nama,
+    kelas: LKPD.state.user.kelas,
+    kategori: LKPD.state.user.kategori,
+    username: LKPD.state.user.username,
+    nama2: (LKPD.state.access && LKPD.state.access.pair) ? LKPD.state.access.pair.nama2 : '-',
+    username2: (LKPD.state.access && LKPD.state.access.pair) ? LKPD.state.access.pair.username2 : '',
+    jawaban:(byOT?'[WAKTU-TAMBAHAN] ':'')+buildKuisJawaban(),
+    waktuPengerjaan: fmtSec(G.used),
+    percobaan: 1,
+    skor: f,
+    waktuTambahan: G.ot ? fmtSec(GC.OT - Math.max(0, G.otLeft)) : '-'
+  };
+
+  // Disable tombol finish, tampilkan status
+  const fb = $('#g-finish');
+  fb.disabled = true;
+  fb.textContent = '⏳ Mengirim kuis...';
+
+  const r = await kirimDenganRetry(payload, fb, null);
+  if (r && r.status === 'ok') {
+    LKPD.save({ submittedKuis: true, kuisScore: f });
+    $('#game-root').classList.add('hidden');
+    $('#g-saved').textContent = f;
+    $('#g-success').classList.remove('hidden');
+  } else {
+    LKPD.toast('❌ Gagal kirim kuis — coba lagi');
+    fb.disabled = false;
+    fb.textContent = '📤 Akhiri & Kirim';
+    G.phase = 'game';
+    startT();
+  }
+}
+$('#g-exit').onclick=()=>{window.close();setTimeout(()=>{document.body.innerHTML='<div class="p-8 text-center">✅ Sesi berakhir. Tutup tab ini.</div>';},400);};
+function initGame(){if(LKPD.load().submittedKuis){$('#g-saved').textContent=LKPD.load().kuisScore||0;$('#game-root').classList.add('hidden');$('#g-success').classList.remove('hidden');return;}startT();loadQ(0);}
+if (DEBUG) {
+  window.__G = G; window.__GC = GC;
+  window.__skip = () => { G.used = GC.MIN; G.timeLeft = 5; updateBtn(); };
+  console.log('[DEBUG] Timer dipercepat. Ketik __skip() untuk lompat ke fase kirim.');
+}
+// ===== INIT =====
+renderK1();renderK2();
+LKPD.restoreAnswers();
+if(LKPD.load().submittedLKPD){submitted=true;unlockKuis();}
+$('#lock-1').onclick=()=>{const on=!$('#lock-1').dataset.on;$('#lock-1').dataset.on=on?'1':'';$$('#k1-cards input,#k1-bs .q-bs').forEach(e=>e.disabled=!!on);};
+$('#lock-2').onclick=()=>{const on=!$('#lock-2').dataset.on;$('#lock-2').dataset.on=on?'1':'';$$('#k2-scaffold input').forEach(e=>e.disabled=!!on);};
+});
+</script>
+
+</body>
+</html>

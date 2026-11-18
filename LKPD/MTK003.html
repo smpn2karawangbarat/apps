@@ -1,0 +1,108 @@
+<!DOCTYPE html><html lang="id"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LKPD MTK-003 — Pangkat, Akar, Baku</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+<style>.q-ans{width:74px;padding:5px;border:1.5px solid #cbd5e1;border-radius:8px;text-align:center;font-weight:600}
+.step-row{display:flex;align-items:center;flex-wrap:wrap;gap:4px;margin-bottom:8px;font-size:14px}
+.input-correct{border-color:#10b981!important;background:#ecfdf5!important}
+.input-wrong{border-color:#ef4444!important;background:#fef2f2!important}
+.mc-option{background:#fff}.mc-option.selected{background:#dbeafe;border-color:#3b82f6}
+.mc-option.correct{background:#dcfce7!important;border-color:#10b981!important}
+.mc-option.wrong{background:#fee2e2!important;border-color:#ef4444!important}
+.mc-option.show-correct{background:#ecfdf5!important;outline:2px solid #10b981}</style>
+</head><body class="bg-slate-100 p-4"><div id="main" class="hidden max-w-4xl mx-auto space-y-5">
+<header class="bg-gradient-to-r from-teal-700 to-emerald-700 text-white rounded-3xl p-5">
+<h1 class="text-xl font-extrabold">MTK-003 • PANGKAT • AKAR • BAKU</h1>
+<div class="flex gap-3 text-sm mt-1"><span id="id-nama"></span><span id="id-kelas"></span><span id="id-kat"></span></div></header>
+<section class="bg-white rounded-3xl p-5 border space-y-3"><h2 class="font-bold">🃏 Keg 1: Bentuk Akar</h2><div id="k1"></div></section>
+<section class="bg-white rounded-3xl p-5 border space-y-3"><h2 class="font-bold">🩸 Keg 2: Bentuk Baku (Sel Darah)</h2><div id="k2"></div></section>
+<div class="flex justify-center"><button id="btn-ev" class="w-full sm:w-2/3 py-3 bg-indigo-600 text-white rounded-2xl font-extrabold">📝 Cek Nilai & Evaluasi</button></div>
+<div id="score" class="hidden bg-white rounded-3xl p-5 border-2 border-indigo-500 text-center space-y-2">
+<div class="text-4xl font-black text-indigo-800" id="score-val">0</div>
+<button id="btn-kirim" class="w-full py-3 bg-sky-600 text-white rounded-2xl font-extrabold">📤 Kirim Nilai LKPD</button></div>
+<div id="quiz" class="hidden bg-white rounded-3xl p-5 border space-y-3"><h2 class="font-bold">🎯 Kuis (10)</h2><div id="q-area"></div>
+<button id="q-cek" class="w-full py-2 bg-teal-700 text-white rounded-xl font-bold">CEK</button>
+<button id="q-kirim" class="w-full py-2 bg-green-600 text-white rounded-xl font-extrabold">📤 Akhiri & Kirim Kuis</button></div>
+</div>
+<script src="lib/config.js"></script><script src="core/APP_STATE.js"></script>
+<script src="core/SCORING_LOGIC.js"></script><script src="core/PLAIN.js"></script>
+<script src="core/FUNCTIONS_RENDER.js"></script><script src="data/DATA_POOL.js"></script>
+<script src="core/GENERATORS.js"></script><script src="core/TEMPLATES.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded',async()=>{
+const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
+const SC=LKPD_SCORING,R=LKPD_RENDER;
+const boot=await LKPD.init({kode:'MTK-003'});
+if(!boot.ok){document.body.innerHTML='<div class="p-8 text-center text-red-600 font-bold">'+boot.msg+'</div>';return;}
+const U=boot.user,KAT=U.kategori;
+$('#id-nama').textContent=U.nama;$('#id-kelas').textContent=U.kelas;$('#id-kat').textContent='Kat '+KAT;
+$('#main').classList.remove('hidden');
+const st0=LKPD.load();const SALT=st0.salt||(Date.now()%2147483647);if(!st0.salt)LKPD.save({salt:SALT});
+
+/* ===== KEG 1: KOLAM (scaffold) ===== */
+const K=TEMPLATES.genKolam();
+const k1keys=[K.L,K.B,K.W,K.B,K.prod,K.V,K.Vair,K.liter,K.kel,K.kelApprox];
+$('#k1').innerHTML=`<p class="text-sm">Panjang <span class="t" data-tex="${K.texP}"></span> m, lebar <span class="t" data-tex="${K.texW}"></span> m, kedalaman ${K.t} m, terisi ${K.pct}%.</p>
+<div class="step-row">Panjang sederhana = <input class="q-ans" id="k1-0">√<input class="q-ans" id="k1-1" style="width:40px"></div>
+<div class="step-row">Lebar sederhana = <input class="q-ans" id="k1-2">√<input class="q-ans" id="k1-3" style="width:40px"></div>
+<div class="step-row">Panjang × Lebar = <input class="q-ans" id="k1-4"></div>
+<div class="step-row">Volume = <input class="q-ans" id="k1-5"> m³</div>
+<div class="step-row">Volume air (${K.pct}%) = <input class="q-ans" id="k1-6"> m³</div>
+<div class="step-row">= <input class="q-ans" id="k1-7"> liter</div>
+<div class="step-row">Bantalan = <input class="q-ans" id="k1-8">√<input class="q-ans" id="k1-9" style="width:40px"> ≈ <input class="q-ans" id="k1-10"> m</div>`;
+k1keys.push(K.B); // k1-9 radicand
+/* ===== KEG 2: DARAH (scaffold) ===== */
+const D=TEMPLATES.genDarah();
+const k2keys=[D.mantMikro,-5,D.mantHari,8,D.putih,D.merah];
+$('#k2').innerHTML=`<div class="step-row">74,1 µm = <input class="q-ans" id="k2-0">×10^<input class="q-ans" id="k2-1" style="width:46px"> m</div>
+<div class="step-row">Sel/hari = <input class="q-ans" id="k2-2">×10^<input class="q-ans" id="k2-3" style="width:46px"></div>
+<div class="step-row">Putih 10 donor = <input class="q-ans" id="k2-4" style="width:120px"></div>
+<div class="step-row">Merah 2 hari = <input class="q-ans" id="k2-5" style="width:140px"></div>`;
+$$('.t').forEach(el=>{try{katex.render(el.dataset.tex,el,{throwOnError:false});}catch(e){}});
+
+/* ===== EVALUASI LKPD ===== */
+let submitted=false,finalScore=0;
+$('#btn-ev').onclick=()=>{
+  let ok1=0;[...Array(11)].forEach((_,i)=>{const e=$('#k1-'+i);const n=SC.normNum(e.value);const ok=n!==null&&SC.near(n,k1keys[i]);e.classList.add(ok?'input-correct':'input-wrong');if(ok)ok1++;});
+  let ok2=0;[...Array(6)].forEach((_,i)=>{const e=$('#k2-'+i);const n=SC.normNum(e.value);const ok=n!==null&&SC.near(n,k2keys[i]);e.classList.add(ok?'input-correct':'input-wrong');if(ok)ok2++;});
+  finalScore=Math.round((ok1/11)*50+(ok2/6)*50);
+  $('#score-val').textContent=finalScore;$('#score').classList.remove('hidden');
+};
+$('#btn-kirim').onclick=async()=>{
+  if(submitted)return;
+  let username=LKPD.state.user.username;if(!username){try{const ds=JSON.parse(localStorage.getItem('DIRECT_SESSION')||'null');if(ds)username=ds.username;}catch(e){}}
+  const payload={tipe:'LKPD',kode:'MTK-003',username,nama1:U.nama,kelas:U.kelas,kategori:KAT,jawaban:'K1+K2',waktuPengerjaan:'-',percobaan:1,autoNilai:finalScore,totalSoal:17};
+  let att=0,last=null;while(att<5){try{const r=await fetch(CFG.GS_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)}).then(r=>r.json());last=r;if(r.status==='ok')break;if(r.status==='busy'){att++;await new Promise(o=>setTimeout(o,600));continue;}break;}catch(e){att++;await new Promise(o=>setTimeout(o,600));}}
+  if(last&&last.status==='ok'){submitted=true;LKPD.save({submittedLKPD:true});$('#quiz').classList.remove('hidden');initQ();}
+  else LKPD.toast('❌ '+(last?last.msg:'gagal'));
+};
+
+/* ===== KUIS 10 ===== */
+const G={cur:0,scores:Array(10).fill(null),qs:[]};
+function initQ(){
+  G.qs=[];for(let i=0;i<3;i++)G.qs.push(GENERATORS.registry.genPangkatMC({A:3,B:2,C:1}[KAT]));
+  for(let i=0;i<3;i++)G.qs.push(genAkar());
+  for(let i=0;i<4;i++)G.qs.push(genRasional());
+  loadQ(0);
+}
+function genAkar(){const p=DATA_POOL.m013.pool;const it=(p[{A:'U',B:'S',C:'M'}[KAT]]||p.M)[Math.floor(Math.random()*(p[{A:'U',B:'S',C:'M'}[KAT]]||p.M).length)];const alts=GENERATORS.smartAlts(it.key);const o=[{val:it.key,correct:true}];alts.forEach(a=>o.push({val:a,correct:false}));return{type:'mc',tex:it.t,options:shuffle(o)};}
+function genRasional(){const p=DATA_POOL.m014.pool;const it=(p[{A:'U',B:'S',C:'M'}[KAT]]||p.M)[0];let i=0;const key=it.tpl.replace(/\{(\d+)\}/g,()=>it.k[i++]);const alts=GENERATORS.smartAlts(key);const o=[{val:key,correct:true}];alts.forEach(a=>o.push({val:a,correct:false}));return{type:'mc',tex:it.t,options:shuffle(o)};}
+function shuffle(a){const r=[...a];for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]];}return r;}
+function loadQ(i){G.cur=i;const q=G.qs[i];
+  $('#q-area').innerHTML=`<b>Soal ${i+1}/10</b> <span class="t" data-tex="${q.tex}"></span>`+R.renderMC(q.options,'mc');
+  $$('#q-area .t').forEach(el=>{try{katex.render(el.dataset.tex,el,{throwOnError:false});}catch(e){}});
+  R.wireKatex('#q-area');R.wireMC('#q-area');}
+$('#q-cek').onclick=()=>{const q=G.qs[G.cur];const s=$('#q-area .mc-radio:checked');const ok=s&&q.options[+s.value].correct;G.scores[G.cur]=ok?1:0;
+  $$('#q-area .mc-option').forEach((o,i)=>{o.classList.remove('correct','wrong','show-correct');if(q.options[i].correct)o.classList.add('show-correct');const r=o.querySelector('.mc-radio');if(r&&r.checked)o.classList.add(q.options[i].correct?'correct':'wrong');if(r)r.disabled=true;});
+  if(G.cur<9)loadQ(G.cur+1);};
+$('#q-kirim').onclick=async()=>{
+  const f=Math.round(G.scores.reduce((a,b)=>a+(b||0),0)*10);
+  let username=LKPD.state.user.username;if(!username){try{const ds=JSON.parse(localStorage.getItem('DIRECT_SESSION')||'null');if(ds)username=ds.username;}catch(e){}}
+  const payload={tipe:'KUIS',kode:'MTK-003',username,nama1:U.nama,kelas:U.kelas,kategori:KAT,jawaban:G.scores.map(s=>s||0).join('|'),waktuPengerjaan:'-',percobaan:1,skor:f};
+  const r=await LKPD.kirim(payload).catch(()=>null);
+  if(r&&r.status==='ok'){LKPD.toast('✅ Kuis terkirim: '+f);}else LKPD.toast('❌ gagal');
+};
+});
+</script></body></html>
